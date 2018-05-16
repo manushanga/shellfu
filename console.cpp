@@ -198,6 +198,12 @@ Console::Console(const std::vector<std::string>& commands)
                 _commandBuf.print(_commands[_hIndex].getCommand(_vIndex));
                 break;
             }
+            case VirtualKey::RETURN:
+            {
+                _result = _commands[_hIndex].getCommand();
+                _stop = true;
+                break;
+            }
             default:
                 break;
             }
@@ -210,15 +216,21 @@ Console::Console(const std::vector<std::string>& commands)
     {
         _commands.push_back(Command(command));
     }
+    _vIndex = 0;
+    _hIndex = 0;
+    _stop = false;
 }
 
-void Console::run()
+std::string Console::run()
 {
-    while (1)
+    do
     {
         int a = _termImpl->getNextChar();
         _mapperImpl->push(a);
     }
+    while (!_stop);
+
+    return _result;
 }
 
 Console::~Console()

@@ -7,8 +7,12 @@ using namespace std;
 
 int main()
 {
-    CommandBuffer b;
-    Console c({"for {} in {} do; echo ${}; done;", "grep -rn {} {} | less"});
-    c.run();
+    std::string result;
+    {
+        Console c({"for {} in {}; do {} ${}; done", "grep -rn {} {} | less"});
+        result = c.run();
+    }
+
+    system(result.c_str());
     return 0;
 }
